@@ -3,20 +3,23 @@ import { persistReducer } from 'redux-persist'
 import configureStore from './CreateStore'
 import rootSaga from '../Sagas/'
 import ReduxPersist from '../Config/ReduxPersist'
+// import { reducer as network } from 'react-native-offline';
+
 
 /* ------------- Assemble The Reducers ------------- */
 export const reducers = combineReducers({
   nav: require('./NavigationRedux').reducer,
-  github: require('./GithubRedux').reducer,
-  search: require('./SearchRedux').reducer
+  gallery: require('./GalleryRedux').reducer,
+  historical: require('./HistoricalRedux').reducer,
+  // network
 })
 
 export default () => {
   let finalReducers = reducers
   // If rehydration is on use persistReducer otherwise default combineReducers
   if (ReduxPersist.active) {
-    const persistConfig = ReduxPersist.storeConfig
-    finalReducers = persistReducer(persistConfig, reducers)
+    const primary = ReduxPersist.storeConfig
+    finalReducers = persistReducer(primary, reducers)
   }
 
   let { store, sagasManager, sagaMiddleware } = configureStore(finalReducers, rootSaga)
